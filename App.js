@@ -1,14 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect} from 'react';
-import { Login, Register,Home,EditUser,ViewUser } from './screens'
+import { Login, Register,Home,ResetPassword,ViewUser,Album,Photo } from './screens'
 import UsersServices from './services/UserServices'
 import { Alert} from'react-native'
 
 export default function App() {
 
   const [render, setRender] = useState(false)
-  const [currentUser, setCurrentUser] = useState("")
-  const [user, setUser] = useState([])
+    const [currentUser, setCurrentUser] = useState("")
+    const [userId, setUserId] = useState("")
+    const [user, setUser] = useState([])
+    const [albumId, setAlbumId] = useState("")
   
 
   useEffect(() => { 
@@ -41,26 +43,26 @@ export default function App() {
     setPage("LOGIN")   
   }
 
-  const updateUserHandler = (id,u) => { 
-      const updateUser = user;
-      console.log(u);
-      for (let i = 0; i < updateUser.length; i++) {
-          const element = updateUser[i];
-          if (element.id === id) { 
-            element.name = u.name
-            element.username = u.username
-            element.email = u.email
-            element.password = u.password
-            element.address.city = u.address.city
-            element.address.street = u.address.street
-            element.address.suite = u.address.suite
-            element.address.zipcode = u.address.zipcode
-          }
+  const updatePasswordHandler = (id,password) => { 
+    
+    var dataUser = user;
+    
+    for (let i = 0; i < dataUser.length; i++) {
+      const element = user[i];
+      if (element.id === id) { 
+        element.password = password.password
+        alert("Reset Password Successfull, Please Login Again.!")
+        break;
       }
-      Alert.alert("Update User Successfull")
-      setUser(updateUser);
-      setPage("HOME")
+    }
+    alert(id)
+    alert(password.password)
+    setUser(dataUser)
+    console.log(dataUser);
+    setPage("LOGIN")
+
   }
+
 
     const loginPage = () => { 
     setPage("LOGIN")    
@@ -69,14 +71,24 @@ export default function App() {
   const logoutHandler = () => { 
     setPage("LOGIN")    
   }
+    
+  const PhotoHandler = (id) => { 
+        setAlbumId(id)
+        setPage("PHOTO")
+    }
+    const AlbumHandler = (id) => { 
+        setUserId(id)
+        setPage("ALBUM")
+    }
 
-  const EditUserHandler = (id) => { 
+
+  const resetPasswordHandler = (id) => { 
     console.log(id);
     var curent = user.filter(u => u.id === id);
     console.log(curent);
     console.log(curent.username);
       setCurrentUser(curent[0])
-    setPage("EDIT")
+    setPage("RESET-PASSWORD")
   }
   
     const viewUserHandler = (id) => { 
@@ -101,9 +113,12 @@ export default function App() {
                         for (let i = 0; i < user.length; i++) {
                             const element = user[i];
                             if (element.id === id) { 
-                                user.splice(i, 1)
-                                Alert.alert("Delete Successfull")
+                              user.splice(i, 1)
+                              Alert.alert("Delete Successfull")
+                              break;
                             }
+                            
+                          alert("called")
                         }
 
                 } }
@@ -122,11 +137,15 @@ export default function App() {
       case "REGISTER":
         return <Register login={loginPage} register={registerHandler} />
       case "HOME":
-            return <Home data={user} logout={logoutHandler} editUser={EditUserHandler} viewUser={viewUserHandler} delete={deleteHandler}/>
-      case "EDIT":
-        return <EditUser home={homePage} data={currentUser} update={updateUserHandler}/>      
+            return <Home data={user} logout={logoutHandler} resetPassword={resetPasswordHandler} viewUser={viewUserHandler} delete={deleteHandler} album={AlbumHandler}/>
+      case "RESET-PASSWORD":
+        return <ResetPassword home={homePage} data={currentUser} update={updatePasswordHandler}/>      
       case "VIEW":
         return <ViewUser home={homePage} data={currentUser}/>      
+      case "ALBUM":
+            return <Album back={homePage} userId={userId} photo={PhotoHandler}/>      
+      case "PHOTO":
+            return <Photo back={homePage} albumId={albumId} />      
       default:
         break;
     }

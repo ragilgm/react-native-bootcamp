@@ -130,7 +130,8 @@ export default function Register(props) {
       
         </View>
         <View style={styles.inputView}>
-        <TextInput  
+         <TextInput  
+           secureTextEntry={true}
             placeholder="password .."
                placeholderTextColor="white"
                onChangeText={text => setPassword(text)}

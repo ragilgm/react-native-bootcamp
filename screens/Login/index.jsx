@@ -77,10 +77,12 @@ const registerHandler = () => {
          console.log(props.data[i].password);
          if (username === props.data[i].username && password === props.data[i].password) { 
             console.log(props.data[i]);
-            console.log("login berhasil");
+            alert("Login Successfull")
             props.home(props.data[i])
+            return
          }
       }
+      alert("Login Failed")
       
    }
 
@@ -89,7 +91,8 @@ const registerHandler = () => {
          <Text style={styles.title}>Login Page</Text>
             <View style={styles.inputView} >
   
-          <TextInput  
+            <TextInput  
+            
             placeholder="Username .."
             placeholderTextColor="white"
                style={styles.inputText}    
@@ -99,7 +102,8 @@ const registerHandler = () => {
       
         </View>
         <View style={styles.inputView}>
-        <TextInput  
+            <TextInput  
+                  secureTextEntry={true}
             placeholder="Password .."
             placeholderTextColor="white"
                style={styles.inputText}    
