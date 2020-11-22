@@ -27,7 +27,7 @@ export default function Register(props) {
       },
     
       container: {
-        marginTop:240,
+        marginTop:100,
         flex: 1,
         justifyContent: "center",
         alignItems:"center"
@@ -57,20 +57,41 @@ export default function Register(props) {
       }
    });
    
-   const [fullname, setFullname] = useState("")
-   const [username, setUsername] = useState("")
+
+
+   const [name, setName] = useState("")
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
    const [password, setPassword] = useState("")
 
    const loginhandler = () => { 
       props.login()
    }
    const registerHandler = () => { 
-      var user = {
-         fullname:fullname,
-         username:username,
-         password:password
-       }
-      props.register(user)
+   var dataUser= {
+    "name": name,
+    "username": username,
+     "email": email,
+    "password":password,
+    "address": {
+      "street": "",
+      "suite": "",
+      "city": "",
+      "zipcode": "",
+      "geo": {
+        "lat": "",
+        "lng": ""
+      }
+    },
+    "phone": "",
+    "website": "",
+    "company": {
+      "name": "",
+      "catchPhrase": "",
+      "bs": ""
+    }
+  }
+      props.register(dataUser)
    }
    return (
       <View style={styles.container}>
@@ -78,10 +99,10 @@ export default function Register(props) {
             <View style={styles.inputView} >
   
           <TextInput  
-            placeholder="Fullname .."
+            placeholder="name .."
                placeholderTextColor="white"
-               onChangeText={text => setFullname(text)}
-               defaultValue={fullname}  
+               onChangeText={text => setName(text)}
+               defaultValue={name}  
               style={styles.inputText}         
             />
       
@@ -93,6 +114,17 @@ export default function Register(props) {
                placeholderTextColor="white"
                onChangeText={text => setUsername(text)}
                defaultValue={username}  
+              style={styles.inputText}         
+            />
+      
+        </View>
+            <View style={styles.inputView} >
+  
+          <TextInput  
+            placeholder="Email .."
+               placeholderTextColor="white"
+               onChangeText={text => setEmail(text)}
+               defaultValue={email}  
               style={styles.inputText}         
             />
       

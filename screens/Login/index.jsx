@@ -76,6 +76,7 @@ const registerHandler = () => {
          console.log(props.data[i].username);
          console.log(props.data[i].password);
          if (username === props.data[i].username && password === props.data[i].password) { 
+            console.log(props.data[i]);
             console.log("login berhasil");
             props.home(props.data[i])
          }
