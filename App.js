@@ -1,163 +1,122 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect} from 'react';
-import { Login, Register,Home,ResetPassword,ViewUser,Album,Photo } from './screens'
-import UsersServices from './services/UserServices'
-import { Alert} from'react-native'
+import React, {useState,useEffect} from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {Home,Login,Users,Register,Album} from './screens'
+import { NavigationContainer } from '@react-navigation/native';
+import { AntDesign } from '@expo/vector-icons';
+import UserServices from './services/UserServices'
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
+import { log } from 'react-native-reanimated';
+
+const styles = StyleSheet.create({
+  header: {
+    height: 60,
+    backgroundColor:'#3277a8'
+  },
+  headerText: {
+    marginTop: 25,
+    marginRight: "auto",
+    marginLeft:10,
+    textAlign:'center'
+  }
+})
+
+const Drawer = createDrawerNavigator();
+
+
 
 export default function App() {
+  const [users, setUsers] = useState([])
+  const [isLogin, setIsLogin] = useState(false)
+  const [currentUser, setCurrentUser] = useState("")
 
-  const [render, setRender] = useState(false)
-    const [currentUser, setCurrentUser] = useState("")
-    const [userId, setUserId] = useState("")
-    const [user, setUser] = useState([])
-    const [albumId, setAlbumId] = useState("")
-  
-
-  useEffect(() => { 
-    UsersServices.getUsers()
-        .then(res => { 
-          console.log("feching");
+  useEffect(() => {
+    UserServices.getUsers()
+      .then(res => { 
         for (let i = 0; i < res.data.length; i++) {
           res.data[i].password = "user"
         }
-        setUser(res.data)
-        console.log(res.data);
+        setUsers(res.data) 
       })
-  },[render])
+  },[])
 
-  const [page, setPage] = useState("LOGIN")
-  
-  const homePage = (param) => {
-    setPage("HOME")    
-    }
-    const registerPage = () => { 
-    setPage("REGISTER")    
-    }
-  
-  const registerHandler = (u) => { 
-      console.log(u);
-      var id = user[user.length-1].id+1;
-      u.id = id
-      setUser([...user, u])
-      Alert.alert("Register Successfull")
-    setPage("LOGIN")   
-  }
+  // function ==================================================
 
-  const updatePasswordHandler = (id,password) => { 
-    
-    var dataUser = user;
-    
-    for (let i = 0; i < dataUser.length; i++) {
-      const element = user[i];
-      if (element.id === id) { 
-        element.password = password.password
-        alert("Reset Password Successfull, Please Login Again.!")
-        break;
-      }
-    }
-    alert(id)
-    alert(password.password)
-    setUser(dataUser)
-    console.log(dataUser);
-    setPage("LOGIN")
-
-  }
-
-
-    const loginPage = () => { 
-    setPage("LOGIN")    
-    }
-
-  const logoutHandler = () => { 
-    setPage("LOGIN")    
-  }
-    
-  const PhotoHandler = (id) => { 
-        setAlbumId(id)
-        setPage("PHOTO")
-    }
-    const AlbumHandler = (id) => { 
-        setUserId(id)
-        setPage("ALBUM")
-    }
-
-
-  const resetPasswordHandler = (id) => { 
-    console.log(id);
-    var curent = user.filter(u => u.id === id);
-    console.log(curent);
-    console.log(curent.username);
-      setCurrentUser(curent[0])
-    setPage("RESET-PASSWORD")
+  const registerHandler = (u,navigation) => { 
+    console.log(u);
+    var id = users[users.length-1].id+1;
+    u.id = id
+    setUsers([...users, u])
+    Alert.alert("Register Successfull")
+    navigation.navigate('Login')
   }
   
-    const viewUserHandler = (id) => { 
-        var curent = user.filter(u => u.id === id);
-        setCurrentUser(curent[0])
-        setPage("VIEW")
-    }
-
-    const deleteHandler = (id) => { 
-        Alert.alert(
-            "Confirm",
-            "are you sure you want to delete this data?",
-            [
-              {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-              },
-                {
-                    text: "OK", onPress: () => { 
-                        console.log(id);
-                        for (let i = 0; i < user.length; i++) {
-                            const element = user[i];
-                            if (element.id === id) { 
-                              user.splice(i, 1)
-                              Alert.alert("Delete Successfull")
-                              break;
-                            }
-                            
-                          alert("called")
-                        }
-
-                } }
-            ],
-            { cancelable: false }
-          );
-      
-    
-        
-    }
-  
-  const RenderPage = () => { 
-    switch (page) {
-      case "LOGIN":
-        return <Login home={homePage} data={user} register={registerPage} />
-      case "REGISTER":
-        return <Register login={loginPage} register={registerHandler} />
-      case "HOME":
-            return <Home data={user} logout={logoutHandler} resetPassword={resetPasswordHandler} viewUser={viewUserHandler} delete={deleteHandler} album={AlbumHandler}/>
-      case "RESET-PASSWORD":
-        return <ResetPassword home={homePage} data={currentUser} update={updatePasswordHandler}/>      
-      case "VIEW":
-        return <ViewUser home={homePage} data={currentUser}/>      
-      case "ALBUM":
-            return <Album back={homePage} userId={userId} photo={PhotoHandler}/>      
-      case "PHOTO":
-            return <Photo back={homePage} albumId={albumId} />      
-      default:
-        break;
+  const loginHandler = (username, password, navigation) => { 
+    const checkLogin = users.filter(data => data.username === username && data.password === password)
+    if (checkLogin.length !== 0) {
+      alert("Login Successfull")
+      setIsLogin(true)
+      setCurrentUser(checkLogin[0])
+    } else { 
+      alert("Login Failed")
+      navigation.navigate("Login")
     }
   }
 
+  // function ==================================================
 
 
+  // mapping ===================================================
+  const HomePage = ({navigation}) => { 
+  return (
+    <Home navigation={navigation}>
+      <Users user={currentUser}/>
+    </Home>)
+}
+  
+const AlbumPage = ({navigation}) => { 
+  return (
+    <Home navigation={navigation}>
+      <Album userId={currentUser.id}/>
+    </Home>)
+}
+const PhotoPage = ({navigation}) => { 
+  return (
+    <Home navigation={navigation}>
+      <Users users={currentUser} />
+    </Home>)
+}
+  
+  const RegisterPage = ({ navigation }) => { 
+    return (<Register navigation={navigation} register={registerHandler}/>)
+  }
+  
+  const LoginPage = ({ navigation }) => { 
+    return (
+      <Login users={users} navigation={navigation} login={loginHandler}/>
+    )
+  }
+  // mapping ===================================================
 
   return (
-    <>
-      {RenderPage()}
-    </>
-
+    <NavigationContainer>
+      {!isLogin ?
+       <Drawer.Navigator initialRouteName="Login">
+       <Drawer.Screen name="Login" component={LoginPage}  />
+       <Drawer.Screen name="Register" component={RegisterPage}  />
+     </Drawer.Navigator>
+        :
+        <Drawer.Navigator  initialRouteName="Home">
+        <Drawer.Screen name="Home" component={HomePage}  />
+        <Drawer.Screen name="Albums" component={AlbumPage} />
+        <Drawer.Screen name="Photos" component={PhotoPage} />
+        <Drawer.Screen name="Logout" component={PhotoPage} />
+      </Drawer.Navigator>
+      }
+    </NavigationContainer>
   );
 }

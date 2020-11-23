@@ -65,24 +65,11 @@ const [password, setPassword] = useState("")
 
   
 const registerHandler = () => { 
-   props.register();
+   props.navigation.navigate("Register")
    }
    
    const loginHandler = () => { 
-      console.log('====================================');
-      console.log(props.data);
-      console.log('====================================');
-      for (let i = 0; i < props.data.length; i++) {
-         console.log(props.data[i].username);
-         console.log(props.data[i].password);
-         if (username === props.data[i].username && password === props.data[i].password) { 
-            console.log(props.data[i]);
-            alert("Login Successfull")
-            props.home(props.data[i])
-            return
-         }
-      }
-      alert("Login Failed")
+      props.login(username, password, props.navigation)
       
    }
 

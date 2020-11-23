@@ -10,6 +10,7 @@ function Album(props) {
 
 
    useEffect(() => {
+      alert(props.userId)
       UserServices.getAlbumByUser(props.userId)
          .then(res => {
             console.log(res.data);
@@ -42,11 +43,6 @@ const renderItem = ({ item }) => (
    
    return (
       <SafeAreaView style={styles.container}>
-         <View style={styles.header}>
-            <Text style={{ color: "white" }} onPress={props.back}><AntDesign name="back" size={24} color="white" />Back</Text>
-            <Text style={{ color: "white", marginTop:7,marginRight:40 }}>Albums</Text>
-            <Text style={{ color: "white" }}></Text>
-         </View>
          <FlatList
             data={album}
             renderItem={renderItem}

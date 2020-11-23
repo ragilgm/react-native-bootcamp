@@ -65,9 +65,17 @@ export default function Register(props) {
    const [password, setPassword] = useState("")
 
    const loginhandler = () => { 
-      props.login()
+      props.navigation.navigate("Login")
    }
-   const registerHandler = () => { 
+  const registerHandler = () => { 
+    if (
+      name === "" ||
+      username === "" ||
+      email === "" ||
+      password === ""
+    ) { 
+      alert("All Input Required...!!")
+    }
    var dataUser= {
     "name": name,
     "username": username,
@@ -91,7 +99,7 @@ export default function Register(props) {
       "bs": ""
     }
   }
-      props.register(dataUser)
+      props.register(dataUser,props.navigation)
    }
    return (
       <View style={styles.container}>
