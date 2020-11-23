@@ -51,7 +51,7 @@ export default function App() {
     var id = users[users.length-1].id+1;
     u.id = id
     setUsers([...users, u])
-    Alert.alert("Register Successfull")
+    alert("Register Successfull")
     navigation.navigate('Login')
   }
   

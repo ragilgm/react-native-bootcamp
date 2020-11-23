@@ -75,6 +75,7 @@ export default function Register(props) {
       password === ""
     ) { 
       alert("All Input Required...!!")
+      return
     }
    var dataUser= {
     "name": name,
@@ -100,7 +101,8 @@ export default function Register(props) {
     }
   }
       props.register(dataUser,props.navigation)
-   }
+  }
+  
    return (
       <View style={styles.container}>
          <Text style={styles.title}>Register Page</Text>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, StatusBar, TouchableOpacity,ScrollView  } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import UserServices from '../../services/UserServices'
 
@@ -20,38 +20,22 @@ function Album(props) {
    }, [render])
 
 
-   const photoHandler = (id) => { 
-
-      props.photo(id)
+   const photoHandler = (id) => {
    }
 
-   const Item = ({ item }) => (
-      <View style={styles.item}  >
-         <View >
-            <Text onPress={()=>photoHandler(item.id)} style={styles.label}>{item.title}</Text>
-         </View>
-      </View>
-   );
-
-   
-const renderItem = ({ item }) => (
-   <Item item={item} />
-);
 
 
-
-   
    return (
       <SafeAreaView style={styles.container}>
-         <FlatList
-            data={album}
-            renderItem={renderItem}
-            keyExtractor={data => data.id.toString()}
-         />
+   
+            {album.map(a =>
+               <View key={a.id} style={styles.item}>
+                  <Text style={styles.label}>{a.title}</Text>
+               </View>)}
+
       </SafeAreaView>
    )
 }
-
 
 
 
@@ -68,6 +52,10 @@ const styles = StyleSheet.create({
       paddingHorizontal: 20
 
    },
+   scrollView: {
+      backgroundColor: 'pink',
+      marginHorizontal: 20,
+    },
    action: {
       flexDirection: "row",
    },
@@ -77,16 +65,18 @@ const styles = StyleSheet.create({
       marginTop: StatusBar.currentHeight || 0,
    },
    item: {
+      backgroundColor: "red",
       display: "flex",
-      flexDirection: "row",
+      // flexDirection: "row",
       justifyContent: "space-between",
       backgroundColor: "#42bcf5",
-      padding: 20,
+      padding: 50,
       marginVertical: 8,
       marginHorizontal: 16,
    },
    label: {
       fontSize: 12,
+      textAlign: "center"
    },
 });
 
