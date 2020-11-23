@@ -83,6 +83,7 @@ function Photo(props) {
             onRefresh={onRefresh}
             refreshing={refresh}
             onEndReached={loadMore}
+            numColumns={2}
             onEndReachedThreshold={0.5}
          />
       </SafeAreaView>
