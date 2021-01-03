@@ -6,6 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome'
 import {CardContact} from '../../components'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { connect } from 'react-redux'
 
 
 
@@ -13,7 +14,7 @@ const HomeScreen = (props) => {
 
    const [kontak, setKontak] = useState([])
 
-   const fetchData=() => { 
+   const getDataFromFirebase = () => { 
       KontakRef.onSnapshot(querySnapshot => {
          var data = []
          querySnapshot.forEach((doc) => {
@@ -25,7 +26,8 @@ const HomeScreen = (props) => {
    }
 
    useEffect(() => {
-      fetchData();
+         getDataFromFirebase();
+  
    }, [])
 
    const removeKontak = (id) => { 
@@ -43,7 +45,7 @@ const HomeScreen = (props) => {
                   
                   KontakRef.doc(id).delete().then((res) => { 
                      Alert.alert("Sukses", "Kontak berhasil di hapus..!!")
-                     fetchData();
+                     getDataFromFirebase();
                   })
             }
          ],
@@ -51,13 +53,20 @@ const HomeScreen = (props) => {
        );
    }
 
+   const logoutHandler = () => { 
+      props.logoutUser();
+   }
+
    return (
       <View style={styles.page}>
 
          <View style={styles.header}>
             <Text style={styles.headerTitle}>Daftar Kontak</Text>
-            <View style={styles.line}/>
+            <TouchableOpacity onPress={logoutHandler}>
+            <Text style={styles.logout}>X</Text>
+            </TouchableOpacity>
          </View>
+            <View style={styles.line}/>
 
          <ScrollView showsVerticalScrollIndicator={false} style={styles.listKontak}>
             {kontak.length === 0 ?
@@ -83,6 +92,19 @@ const HomeScreen = (props) => {
    )
 }
 
+const mapStateToProps = (state) => ({
+   userLogin: state.AuthReducer.user,
+   isLogin: state.AuthReducer.isLogin,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+   logoutUser: () => dispatch({ type: "LOGOUT", payload: "", isLogin: false }),
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
+
+
 const styles = StyleSheet.create({
    page: {
       flex: 1,
@@ -90,6 +112,8 @@ const styles = StyleSheet.create({
    header: {
       paddingHorizontal: 30,
       paddingTop: 30,
+      flexDirection: "row",
+      justifyContent:"space-between"
    },
    headerTitle: {
       fontSize: 20,
@@ -124,8 +148,12 @@ const styles = StyleSheet.create({
       shadowRadius: 3.84,
       elevation: 5,
       zIndex:1
+   },
+   logout: {
+      fontSize: 16,
+      fontWeight: "bold",
+      color:"red"
    }
 })
 
 
-export default HomeScreen

@@ -1,7 +1,7 @@
 import React from 'react'
 import { TextInput, Text, StyleSheet } from 'react-native'
 
-const InputText = ({ label, placeholder, keyboardType, isTextArea, onChaneText, value, name }) => {
+const InputText = ({ label, placeholder, keyboardType, isTextArea, onChaneText, value, name, isPassword }) => {
    if (isTextArea) {
       return (
          <>
@@ -12,7 +12,7 @@ const InputText = ({ label, placeholder, keyboardType, isTextArea, onChaneText, 
                style={styles.textInputArea}
                placeholder={placeholder}
                keyboardType={keyboardType}
-               onChangeText={(text)=>onChaneText(name, text)}
+               onChangeText={(text) => onChaneText(name, text)}
                value={value}
             />
          </>
@@ -22,13 +22,26 @@ const InputText = ({ label, placeholder, keyboardType, isTextArea, onChaneText, 
       return (
          <>
             <Text style={styles.label}>{label} </Text>
-            <TextInput
-               style={styles.textInput}
-               placeholder={placeholder}
-               keyboardType={keyboardType}
-               onChangeText={(text)=>onChaneText(name, text)}
-               value={value}
-            />
+            {isPassword===true ? <>
+               <TextInput
+                  style={styles.textInput}
+                  placeholder={placeholder}
+                  keyboardType={keyboardType}
+                  onChangeText={(text) => onChaneText(name, text)}
+                  value={value}
+                  secureTextEntry={true}
+               />
+            </> :
+               <>
+                  <TextInput
+                     style={styles.textInput}
+                     placeholder={placeholder}
+                     keyboardType={keyboardType}
+                     onChangeText={(text) => onChaneText(name, text)}
+                     value={value}
+
+                  />
+               </>}
          </>
       )
    }
@@ -48,7 +61,7 @@ const styles = StyleSheet.create({
 
    },
    textInputArea: {
-      textAlignVertical:"top",
+      textAlignVertical: "top",
       borderWidth: 1,
       borderColor: "grey",
       padding: 5,

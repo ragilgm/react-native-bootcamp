@@ -16,4 +16,5 @@ const db = firebase.firestore(app)
 const Firebase = firebase;
 
 export const KontakRef = db.collection("Kontak")
+export const UserRef = db.collection("Users")
 
