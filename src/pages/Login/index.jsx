@@ -2,7 +2,6 @@ import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity,Alert } from 'react-native'
 import { useState} from "react"
 import { InputText } from '../../components'
-import { UserRef} from '../../config/firebase'
 import { connect } from 'react-redux'
 
 

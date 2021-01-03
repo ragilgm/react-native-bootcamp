@@ -3,7 +3,6 @@ import { useState,useEffect } from 'react'
 import { View, Text, StyleSheet, Alert } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { InputText } from '../../components'
-import { KontakRef} from '../../config/firebase'
 
 const EditContact = (props) => {
 

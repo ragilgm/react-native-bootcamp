@@ -1,7 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { ScrollView,View, Text, StyleSheet,Alert } from 'react-native'
-import { KontakRef } from '../../config/firebase'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome'
 import {CardContact} from '../../components'

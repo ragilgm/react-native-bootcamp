@@ -2,14 +2,15 @@ import React from 'react'
 import {useState} from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 import { InputText } from '../../components'
-import { UserRef} from '../../config/firebase'
+import {DatabaseSqlLite} from '../../config/database'
 
 const Register = (props) => {
 
    var initialValue = {
       fullname: "",
       username: "",
-      password:""
+      password: "",
+      level:""
    }
    const [register, setRegister] = useState(initialValue)
 
@@ -18,18 +19,27 @@ const Register = (props) => {
    }
 
    const registerHandler = () => { 
-      if (register.fullname && register.username && register.password) {
+      if (register.fullname && register.username && register.password && register.level) {
            const user = {
             fullname: register.fullname,
             username: register.username,
-            password:register.password
+              password: register.password,
+            level:register.level
          }
-         UserRef.add(user).then(res => { 
-            Alert.alert("Sukses", "Registrasi Berhasil")
-            props.navigation.replace("Login")
-         }).catch(err => { 
-            Alert.alert("Error", err)
-         })
+
+         var database = new DatabaseSqlLite();
+         database.createUser(user).then(({ result, message }) => {
+            ToastAndroid.show(message, ToastAndroid.SHORT);
+            if (result) {
+               console.log('====================================');
+               console.log("Success");
+               console.log('====================================');
+            }
+         }).catch(err => {
+            console.log('====================================');
+            console.log("failed bro");
+            console.log('====================================');
+         });
       } else { 
          Alert.alert("Error", "Fullname, Username dan Password tidak boleh kosong..!!")
       }
@@ -59,6 +69,13 @@ const Register = (props) => {
                onChaneText={onChangeText}
                name="password"
                isPassword={true}
+            />
+            <InputText
+               label="Level"
+               placeholder="Input Level ..."
+               value={register.level}
+               onChaneText={onChangeText}
+               name="level"
             />
             <TouchableOpacity style={styles.buttonContainer}
                onPress={registerHandler}   
