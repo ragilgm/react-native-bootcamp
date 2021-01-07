@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { ScrollView,View, Text, StyleSheet,Alert } from 'react-native'
-import { KontakRef } from '../../config/firebase'
+import FIrebaseDb from '../../config/firebase/firebase'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome'
 import {CardContact} from '../../components'
@@ -15,7 +15,7 @@ const HomeScreen = (props) => {
    const [kontak, setKontak] = useState([])
 
    const getDataFromFirebase = () => { 
-      KontakRef.onSnapshot(querySnapshot => {
+      FIrebaseDb.fireDb.collection("kontak").onSnapshot(querySnapshot => {
          var data = []
          querySnapshot.forEach((doc) => {
             var id = doc.id
@@ -43,7 +43,7 @@ const HomeScreen = (props) => {
             {
                text: 'OK', onPress: () =>
                   
-                  KontakRef.doc(id).delete().then((res) => { 
+               FIrebaseDb.fireDb.collection("kontak").doc(id).delete().then((res) => { 
                      Alert.alert("Sukses", "Kontak berhasil di hapus..!!")
                      getDataFromFirebase();
                   })
@@ -54,6 +54,7 @@ const HomeScreen = (props) => {
    }
 
    const logoutHandler = () => { 
+      FIrebaseDb.logOutFirebaseUser()
       props.logoutUser();
    }
 

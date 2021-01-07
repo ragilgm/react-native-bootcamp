@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { KontakRef } from '../../config/firebase'
+import FIrebaseDb from '../../config/firebase/firebase'
 
 const Detail = (props) => {
 
@@ -9,7 +9,7 @@ const Detail = (props) => {
 
 
    const getDataById = (id) => { 
-      return KontakRef.doc(id).get()
+      return FIrebaseDb.fireDb.collection("kontak").doc(id).get()
    }
 
    useEffect(() => { 

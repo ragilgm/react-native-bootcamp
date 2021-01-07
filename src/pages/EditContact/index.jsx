@@ -3,7 +3,7 @@ import { useState,useEffect } from 'react'
 import { View, Text, StyleSheet, Alert } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { InputText } from '../../components'
-import { KontakRef} from '../../config/firebase'
+import FIrebaseDb from '../../config/firebase/firebase'
 
 const EditContact = (props) => {
 
@@ -15,7 +15,7 @@ const EditContact = (props) => {
    const [biodata, setBiodata] = useState(initialValue)
 
    useEffect(() => {
-      KontakRef.doc(props.route.params.id).get()
+      FIrebaseDb.fireDb.collection("kontak").doc(props.route.params.id).get()
          .then(res => { 
             setBiodata(res.data())
          }).catch(err => { 
@@ -39,7 +39,7 @@ const EditContact = (props) => {
             alamat:biodata.alamat
          }
 
-         KontakRef.doc(id).set(kontak).then(res => { 
+         FIrebaseDb.fireDb.collection("kontak").doc(id).set(kontak).then(res => { 
             Alert.alert("Sukses", "Kontak berhasil di Edit..!!")
             props.navigation.replace("Home")
          }).catch(err => { 

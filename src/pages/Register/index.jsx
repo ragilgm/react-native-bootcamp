@@ -2,13 +2,12 @@ import React from 'react'
 import {useState} from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 import { InputText } from '../../components'
-import { UserRef} from '../../config/firebase'
+import FIrebaseDb from '../../config/firebase/firebase'
 
 const Register = (props) => {
 
    var initialValue = {
-      fullname: "",
-      username: "",
+      email: "",
       password:""
    }
    const [register, setRegister] = useState(initialValue)
@@ -18,17 +17,16 @@ const Register = (props) => {
    }
 
    const registerHandler = () => { 
-      if (register.fullname && register.username && register.password) {
+      if (register.email && register.password) {
            const user = {
-            fullname: register.fullname,
-            username: register.username,
+            email: register.email,
             password:register.password
          }
-         UserRef.add(user).then(res => { 
+         FIrebaseDb.createfirebaseUser(user).then(res => { 
             Alert.alert("Sukses", "Registrasi Berhasil")
             props.navigation.replace("Login")
          }).catch(err => { 
-            Alert.alert("Error", err)
+           console.log(err);
          })
       } else { 
          Alert.alert("Error", "Fullname, Username dan Password tidak boleh kosong..!!")
@@ -39,26 +37,18 @@ const Register = (props) => {
       <View style={styles.page}>
          <View style={styles.inputContainer}>
             <InputText
-               label="Fullname"
-               placeholder="Input Fullname ..."
-               value={register.fullname}
+               label="Email"
+               placeholder="Input email ..."
+               value={register.email}
                onChaneText={onChangeText}
-               name="fullname"
+               name="email"
             />
             <InputText
-               label="Username"
-               placeholder="Input Username ..."
-               value={register.username}
-               onChaneText={onChangeText}
-               name="username"
-            />
-            <InputText
-               label="Password"
-               placeholder="Input Password ..."
+               label="password"
+               placeholder="Input password ..."
                value={register.password}
                onChaneText={onChangeText}
                name="password"
-               isPassword={true}
             />
             <TouchableOpacity style={styles.buttonContainer}
                onPress={registerHandler}   

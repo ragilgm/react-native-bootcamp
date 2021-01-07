@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { View, Text, StyleSheet, Alert } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { InputText } from '../../components'
-import { KontakRef} from '../../config/firebase'
+import FIrebaseDb from '../../config/firebase/firebase'
 
 const AddContact = (props) => {
 
@@ -28,7 +28,7 @@ const AddContact = (props) => {
             alamat:biodata.alamat
          }
 
-         KontakRef.add(kontak).then(res => { 
+         FIrebaseDb.fireDb.collection("kontak").add(kontak).then(res => { 
             Alert.alert("Sukses", "Kontak berhasil di simpan..!!")
             props.navigation.replace("Home")
          }).catch(err => { 

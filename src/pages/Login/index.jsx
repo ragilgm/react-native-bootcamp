@@ -2,14 +2,14 @@ import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity,Alert } from 'react-native'
 import { useState} from "react"
 import { InputText } from '../../components'
-import { UserRef} from '../../config/firebase'
+import FIrebaseDb from '../../config/firebase/firebase'
 import { connect } from 'react-redux'
 
 
 const Login = (props) => {
 
    var initialValue = {
-      username: "",
+      email: "",
       password:""
    }
 
@@ -20,19 +20,21 @@ const Login = (props) => {
    }
 
    const loginHandler = () => { 
-      if (login.username && login.password) {
-         UserRef.where("username", "==", login.username).where("password","==",login.password).get().then(querySnapshot => { 
-            if (querySnapshot.size === 0) {
-               Alert.alert("Gagal", "Login Gagal..!!")
-            } else { 
+      if (login.email && login.password) {
+         const userLogin = {
+            email: login.email,
+            password:login.password
+         }
+         FIrebaseDb.signInFirebaseUser(userLogin)
+            .then(res => { 
+
                Alert.alert("Sukses", "Login Berhasil..!!")
-               props.loginUser(login);
-            }
+               props.loginUser(login);   
        }).catch(err => { 
           Alert.alert("Error", "error")
        })
     } else { 
-       Alert.alert("Error", "Fullname, Username dan Password tidak boleh kosong..!!")
+       Alert.alert("Error", "Fullname, email dan Password tidak boleh kosong..!!")
     }
    }
 
@@ -43,11 +45,11 @@ const Login = (props) => {
          <View style={styles.line}></View>
          <View style={styles.inputContainer}>
             <InputText
-               label="Username"
-               placeholder="Input Username ..."
-               value={login.username}
+               label="email"
+               placeholder="Input email ..."
+               value={login.email}
                onChaneText={onChangeText}
-                name="username"
+                name="email"
             />
             <InputText
                label="Password"
